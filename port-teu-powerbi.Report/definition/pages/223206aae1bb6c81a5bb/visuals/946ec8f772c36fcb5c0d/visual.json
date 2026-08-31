@@ -73,19 +73,18 @@
         "sort": [
           {
             "field": {
-              "Measure": {
+              "Column": {
                 "Expression": {
                   "SourceRef": {
-                    "Entity": "Query Measures"
+                    "Entity": "DimDate"
                   }
                 },
-                "Property": "Loaded Imports"
+                "Property": "Quarter"
               }
             },
-            "direction": "Descending"
+            "direction": "Ascending"
           }
-        ],
-        "isDefaultSort": true
+        ]
       }
     },
     "drillFilterOtherVisuals": true
