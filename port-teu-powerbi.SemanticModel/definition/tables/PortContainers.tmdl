@@ -1,0 +1,73 @@
+table PortContainers
+	lineageTag: 4e4eb0f4-5ddf-44e3-8657-1c065c59f09a
+
+	column DATE
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: c6fabd79-7a3b-4da6-95d4-3a2df1a9fa71
+		summarizeBy: none
+		sourceColumn: DATE
+
+		annotation SummarizationSetBy = Automatic
+
+	column Port
+		dataType: string
+		lineageTag: 523658ba-b61f-486d-b570-0e7860620519
+		summarizeBy: none
+		sourceColumn: Port
+
+		annotation SummarizationSetBy = Automatic
+
+	column LoadedImportTEU
+		dataType: double
+		lineageTag: 4d1d2dce-e7f9-455d-8c43-680e2992ff89
+		summarizeBy: sum
+		sourceColumn: LoadedImportTEU
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column LoadedExportTEU
+		dataType: double
+		lineageTag: 747f3737-f27a-4199-9f3c-c0275c814db5
+		summarizeBy: sum
+		sourceColumn: LoadedExportTEU
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column EmptyExportTEU
+		dataType: double
+		lineageTag: 16857909-08cb-45c0-b4b7-d572db351651
+		summarizeBy: sum
+		sourceColumn: EmptyExportTEU
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition PortContainers = m
+		mode: import
+		source =
+				let
+				  Source = Csv.Document(File.Contents(FilePath), [Delimiter = ",", QuoteStyle = QuoteStyle.Csv, Columns = 12, Encoding = 65001]),
+				  #"Promoted headers" = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				  #"Removed Columns" = Table.RemoveColumns(#"Promoted headers", {"MEASURE2", "MEASURE1_DESCRIPTION", "MEASURE2_DESCRIPTION", "UNITS", "NOTE", "YEAR", "ID", "SOURCE"}),
+				  #"Filtered Rows" = Table.SelectRows(#"Removed Columns", each ([INDICATOR] = "Empty Export Containers at Select U.S. Ports in TEUs" or [INDICATOR] = "Loaded Export Containers at Select U.S. Ports in TEUs" or [INDICATOR] = "Loaded Import Containers at Select U.S. Ports in TEUs")),
+				  #"Changed column type" = Table.TransformColumnTypes(#"Filtered Rows", {{"DATE", type datetime}, {"INDICATOR", type text}, {"MEASURE1", type text}, {"VALUE1", type number}}, "en-US"),
+				  #"Shortened indicator" = Table.TransformColumns(#"Changed column type", {{"INDICATOR", each
+				      if Text.StartsWith(_, "Loaded Import") then "LoadedImportTEU"
+				      else if Text.StartsWith(_, "Loaded Export") then "LoadedExportTEU"
+				      else "EmptyExportTEU", type text}}),
+				  #"Pivoted indicator" = Table.Pivot(#"Shortened indicator", {"LoadedImportTEU", "LoadedExportTEU", "EmptyExportTEU"}, "INDICATOR", "VALUE1", List.Sum),
+				  #"Renamed port" = Table.RenameColumns(#"Pivoted indicator", {{"MEASURE1", "Port"}}),
+				  #"Typed measures" = Table.TransformColumnTypes(#"Renamed port", {{"LoadedImportTEU", type number}, {"LoadedExportTEU", type number}, {"EmptyExportTEU", type number}})
+				in
+				  #"Typed measures"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

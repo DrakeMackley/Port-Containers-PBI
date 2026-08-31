@@ -1,0 +1,82 @@
+table DimDate
+	lineageTag: d32b4d45-956c-4039-bfe1-0dabb572c7f9
+	dataCategory: Time
+
+	column Date
+		dataType: dateTime
+		isKey
+		formatString: Long Date
+		lineageTag: 2f411b11-b56a-43cd-a113-d14c4a680f58
+		summarizeBy: none
+		sourceColumn: Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Year
+		dataType: int64
+		formatString: 0
+		lineageTag: a253cf3b-7131-4cf9-9176-f21988c03d66
+		summarizeBy: none
+		sourceColumn: Year
+
+		annotation SummarizationSetBy = Automatic
+
+	column MonthNum
+		dataType: int64
+		formatString: 0
+		lineageTag: 5f9736d2-ae4d-4d29-a7d0-8447898508a9
+		summarizeBy: none
+		sourceColumn: MonthNum
+
+		annotation SummarizationSetBy = Automatic
+
+	column MonthName
+		dataType: string
+		lineageTag: 0bc27af3-8e20-47b5-b233-05bd6aac68e9
+		summarizeBy: none
+		sourceColumn: MonthName
+		sortByColumn: MonthNum
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column YearMonth
+		dataType: string
+		lineageTag: 93678e02-6b64-4b68-bb57-fdce673696d8
+		summarizeBy: none
+		sourceColumn: YearMonth
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quarter
+		dataType: string
+		lineageTag: cc0073c7-ea6b-4a15-b664-a6aee21f890d
+		summarizeBy: none
+		sourceColumn: Quarter
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimDate = m
+		mode: import
+		source =
+				let
+				  Start = #date(2019, 1, 1),
+				  End = #date(2026, 12, 31),
+				  Dates = List.Dates(Start, Duration.Days(End - Start) + 1, #duration(1, 0, 0, 0)),
+				  ToTable = Table.FromList(Dates, Splitter.SplitByNothing(), {"Date"}),
+				  Typed = Table.TransformColumnTypes(ToTable, {{"Date", type date}}),
+				  Added = Table.AddColumn(Typed, "Year", each Date.Year([Date]), Int64.Type),
+				  Added2 = Table.AddColumn(Added, "MonthNum", each Date.Month([Date]), Int64.Type),
+				  Added3 = Table.AddColumn(Added2, "MonthName", each Date.ToText([Date], "MMM", "en-US"), type text),
+				  Added4 = Table.AddColumn(Added3, "YearMonth", each Date.ToText([Date], "yyyy-MM", "en-US"), type text),
+				  Added5 = Table.AddColumn(Added4, "Quarter", each "Q" & Text.From(Date.QuarterOfYear([Date])), type text)
+				in
+				  Added5
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

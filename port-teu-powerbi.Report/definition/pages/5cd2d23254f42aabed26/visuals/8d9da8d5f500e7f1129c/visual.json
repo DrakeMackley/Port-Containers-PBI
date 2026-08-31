@@ -1,0 +1,317 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "8d9da8d5f500e7f1129c",
+  "position": {
+    "x": 362.15848322800196,
+    "y": 140.00972289742344,
+    "z": 8,
+    "height": 553.50510452114736,
+    "width": 1194.7496353913466,
+    "tabOrder": 8
+  },
+  "visual": {
+    "visualType": "barChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "PortContainers"
+                    }
+                  },
+                  "Property": "Port"
+                }
+              },
+              "queryRef": "PortContainers.Port",
+              "nativeQueryRef": "Port",
+              "active": true
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Query Measures"
+                    }
+                  },
+                  "Property": "Loaded Imports Negative"
+                }
+              },
+              "queryRef": "Query Measures.Loaded Imports Negative",
+              "nativeQueryRef": "Loaded imports",
+              "displayName": "Loaded imports"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Query Measures"
+                    }
+                  },
+                  "Property": "Loaded Exports"
+                }
+              },
+              "queryRef": "Query Measures.Loaded Exports",
+              "nativeQueryRef": "Loaded exports",
+              "displayName": "Loaded exports"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Query Measures"
+                    }
+                  },
+                  "Property": "Empty Exports"
+                }
+              },
+              "queryRef": "Query Measures.Empty Exports",
+              "nativeQueryRef": "Empty exports",
+              "displayName": "Empty exports"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Query Measures"
+                  }
+                },
+                "Property": "Loaded Imports Negative"
+              }
+            },
+            "direction": "Ascending"
+          }
+        ]
+      }
+    },
+    "objects": {
+      "valueAxis": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "dataPoint": [
+        {
+          "properties": {
+            "fill": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 2,
+                      "Percent": 0.6
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Query Measures.Loaded Imports Negative"
+          }
+        },
+        {
+          "properties": {
+            "fill": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#BAD9B6'"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Query Measures.Loaded Exports"
+          }
+        },
+        {
+          "properties": {
+            "fill": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 0,
+                      "Percent": -0.2
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Query Measures.Empty Exports"
+          }
+        }
+      ],
+      "labels": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 1,
+                      "Percent": 0.4
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "legend": [
+        {
+          "properties": {
+            "position": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Bottom'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "layout": [
+        {
+          "properties": {
+            "stackedGapSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "totals": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "963b4988c78c9503def7",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "PortContainers"
+              }
+            },
+            "Property": "Port"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "9fdeb13c11a016998baf",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Query Measures"
+              }
+            },
+            "Property": "Loaded Imports Negative"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "edc6e548fcbfe0da56c8",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Query Measures"
+              }
+            },
+            "Property": "Empty Exports"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "991f3eb873b91a2d0422",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Query Measures"
+              }
+            },
+            "Property": "Loaded Exports"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

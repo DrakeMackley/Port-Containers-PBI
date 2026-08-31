@@ -1,0 +1,68 @@
+table DimPort
+	lineageTag: c048d650-20bf-4c50-907e-c9eb5fe766e9
+
+	column Port
+		dataType: string
+		lineageTag: 466ec263-d56c-4f09-bf60-386f209487fc
+		summarizeBy: none
+		sourceColumn: Port
+
+		annotation SummarizationSetBy = Automatic
+
+	column Coast
+		dataType: string
+		lineageTag: 9cfd76d1-521c-42b0-8fdf-8c59e62547ab
+		summarizeBy: none
+		sourceColumn: Coast
+
+		annotation SummarizationSetBy = Automatic
+
+	column Latitude
+		dataType: double
+		lineageTag: d4db494b-a701-497d-90ee-a0b37f778555
+		summarizeBy: none
+		sourceColumn: Latitude
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Longitude
+		dataType: double
+		lineageTag: 9ee204d9-adde-4f99-b6d9-d19cbf4a32ed
+		summarizeBy: none
+		sourceColumn: Longitude
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition DimPort = m
+		mode: import
+		source =
+				let
+				  Source = Table.Distinct(Table.SelectColumns(PortContainers, {"Port"})),
+				  #"Added coast" = Table.AddColumn(Source, "Coast", each
+				      if List.Contains({"Los Angeles", "Long Beach", "Oakland", "Sea-Tac"}, [Port]) then "West"
+				      else if [Port] = "Houston" then "Gulf"
+				      else "East", type text),
+				  Coords = [
+				      #"Charleston"  = [Lat = 32.78, Lon = -79.93],
+				      #"Houston"     = [Lat = 29.73, Lon = -95.27],
+				      #"Long Beach"  = [Lat = 33.75, Lon = -118.20],
+				      #"Los Angeles" = [Lat = 33.73, Lon = -118.26],
+				      #"NY-NJ"       = [Lat = 40.67, Lon = -74.10],
+				      #"Oakland"     = [Lat = 37.80, Lon = -122.33],
+				      #"Port of VA"  = [Lat = 36.87, Lon = -76.33],
+				      #"Savannah"    = [Lat = 32.09, Lon = -81.10],
+				      #"Sea-Tac"     = [Lat = 47.43, Lon = -122.38]
+				  ],
+				  #"Added latitude"  = Table.AddColumn(#"Added coast", "Latitude", each Record.Field(Coords, [Port])[Lat], type number),
+				  #"Added longitude" = Table.AddColumn(#"Added latitude", "Longitude", each Record.Field(Coords, [Port])[Lon], type number)
+				in
+				  #"Added longitude"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

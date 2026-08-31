@@ -1,0 +1,74 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 1364,
+            "y": 79
+          },
+          "nodeIndex": "Query Measures",
+          "nodeLineageTag": "cca36997-6f47-450d-85d0-bad8dd681362",
+          "size": {
+            "height": 104,
+            "width": 234
+          },
+          "zIndex": 1
+        },
+        {
+          "location": {
+            "x": 459,
+            "y": 19
+          },
+          "nodeIndex": "DimDate",
+          "nodeLineageTag": "d32b4d45-956c-4039-bfe1-0dabb572c7f9",
+          "size": {
+            "height": 224,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 277,
+            "y": 383
+          },
+          "nodeIndex": "DimPort",
+          "nodeLineageTag": "c048d650-20bf-4c50-907e-c9eb5fe766e9",
+          "size": {
+            "height": 128,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 50,
+            "y": -13
+          },
+          "nodeIndex": "PortContainers",
+          "nodeLineageTag": "4e4eb0f4-5ddf-44e3-8657-1c065c59f09a",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "All tables",
+      "zoomValue": 100,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "All tables",
+  "defaultDiagram": "All tables"
+}

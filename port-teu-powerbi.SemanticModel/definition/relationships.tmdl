@@ -1,0 +1,8 @@
+relationship AutoDetected_925a7a81-8153-48d9-8170-75ecd67b1de7
+	fromColumn: PortContainers.Port
+	toColumn: DimPort.Port
+
+relationship efa842c6-c99d-8c09-659b-8f4eca9cb987
+	fromColumn: PortContainers.DATE
+	toColumn: DimDate.Date
+

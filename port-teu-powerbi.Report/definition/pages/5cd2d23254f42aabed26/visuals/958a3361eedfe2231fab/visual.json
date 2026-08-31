@@ -1,0 +1,142 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "958a3361eedfe2231fab",
+  "position": {
+    "x": 673.91346621293144,
+    "y": 710.31599416626159,
+    "z": 10,
+    "height": 346.50306748466255,
+    "width": 572.2699386503067,
+    "tabOrder": 10
+  },
+  "visual": {
+    "visualType": "scatterChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "PortContainers"
+                    }
+                  },
+                  "Property": "Port"
+                }
+              },
+              "queryRef": "PortContainers.Port",
+              "nativeQueryRef": "Port",
+              "active": true
+            }
+          ]
+        },
+        "X": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Query Measures"
+                    }
+                  },
+                  "Property": "Import/Export Ratio"
+                }
+              },
+              "queryRef": "Query Measures.Import/Export Ratio",
+              "nativeQueryRef": "Import/Export Ratio",
+              "active": true
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Query Measures"
+                    }
+                  },
+                  "Property": "Empty Share"
+                }
+              },
+              "queryRef": "Query Measures.Empty Share",
+              "nativeQueryRef": "Empty Share"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "dataPoint": [
+        {
+          "properties": {
+            "fill": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 5,
+                      "Percent": 0.2
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "1f0a256fc04389dcdd20",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Query Measures"
+              }
+            },
+            "Property": "Import/Export Ratio"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "51cea67a5f035545ec81",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Query Measures"
+              }
+            },
+            "Property": "Empty Share"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "9f0ed17fd69d24fa5135",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "PortContainers"
+              }
+            },
+            "Property": "Port"
+          }
+        },
+        "type": "Categorical"
+      }
+    ]
+  }
+}

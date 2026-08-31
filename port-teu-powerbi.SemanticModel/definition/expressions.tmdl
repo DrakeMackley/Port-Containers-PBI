@@ -1,0 +1,7 @@
+expression FilePath = "C:\Users\drake\OneDrive\4Archive\Documents\2026\PBI\PortData.csv" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 3f2cd913-d400-43db-894e-35fc4f861faf
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Text
+

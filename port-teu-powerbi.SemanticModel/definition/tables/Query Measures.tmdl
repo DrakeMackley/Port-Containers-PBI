@@ -1,0 +1,108 @@
+table 'Query Measures'
+	lineageTag: cca36997-6f47-450d-85d0-bad8dd681362
+
+	measure Rows = COUNTROWS(PortContainers)
+		formatString: 0
+		lineageTag: 2b8193eb-8542-4baa-9bf4-44d198753b9a
+
+	measure 'Loaded Imports' = SUM(PortContainers[LoadedImportTEU])
+		lineageTag: 90998306-ad39-4128-a770-4ff908928924
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Loaded Exports' = SUM(PortContainers[LoadedExportTEU])
+		lineageTag: 26b0e788-e697-47d4-8cab-c01059674219
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Empty Exports' = SUM(PortContainers[EmptyExportTEU])
+		lineageTag: c031fc0d-ba4b-477b-a180-a0471d133322
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Outbound' = [Loaded Exports] + [Empty Exports]
+		lineageTag: c97adad8-f22b-4e4f-8cce-ad3e729fbc07
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Empty Share' = DIVIDE([Empty Exports], [Total Outbound])
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 2ae0fc16-49f8-4776-9e92-2fc68dfb2c44
+
+	measure 'Import/Export Ratio' = DIVIDE([Loaded Imports], [Loaded Exports])
+		lineageTag: ead63d03-b0c6-4352-ba60-eaba0f000762
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Import/Export Ratio Display' = CONCATENATE(FORMAT([Import/Export Ratio], "Fixed"), ":1")
+		lineageTag: f7ab308a-eb48-478d-b356-e1664645a537
+
+	measure 'Loaded Imports Negative' = -[Loaded Imports]
+		lineageTag: 34e75cf7-c913-4243-95e6-c8003865a2f1
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total TEU' = [Loaded Imports] + [Total Outbound]
+		lineageTag: c5df4376-824c-49ac-8c30-ca782b51cebe
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Loaded Imports YoY %' =
+			
+			VAR Prior = CALCULATE([Loaded Imports], DATEADD(DimDate[Date], -12, MONTH))
+			RETURN DIVIDE([Loaded Imports] - Prior, Prior)
+		lineageTag: 27766c6f-e473-4203-873f-0082d6dda3b7
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Imports 3M Avg' =
+			
+			CALCULATE(
+			    AVERAGEX(VALUES(DimDate[YearMonth]), [Loaded Imports]),
+			    DATESINPERIOD(DimDate[Date], MAX(DimDate[Date]), -3, MONTH))
+		lineageTag: 273afa7f-6cec-431e-9e57-afbd53c747a7
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Imports Index 2019 100' =
+			
+			VAR Base =
+			    CALCULATE(
+			        AVERAGEX(VALUES(DimDate[YearMonth]), [Loaded Imports]),
+			        ALL(DimDate), DimDate[Year] = 2019
+			    )
+			RETURN DIVIDE([Loaded Imports], Base) * 100
+		lineageTag: 26d5561a-2f6e-4489-ac59-36024d0946dc
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Share of National Imports' =
+			
+			DIVIDE([Loaded Imports], CALCULATE([Loaded Imports], ALL(DimPort)))
+		lineageTag: de189b64-4229-457c-858f-be89e3038004
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Query Measures'
+		dataType: string
+		isHidden
+		lineageTag: 1966e942-4d88-4fb0-a44b-8a574d437fb7
+		summarizeBy: none
+		sourceColumn: Query Measures
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Query Measures' = m
+		mode: import
+		source =
+				let
+				  Source = ""
+				in
+				  Source
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Text
+

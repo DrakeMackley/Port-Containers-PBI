@@ -1,0 +1,225 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "e37f80bff14c9994f157",
+  "position": {
+    "x": 163.34467671366068,
+    "y": 36.402527953330093,
+    "z": 7,
+    "height": 84.93923189110356,
+    "width": 1603.5780262518231,
+    "tabOrder": 7
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Query Measures"
+                    }
+                  },
+                  "Property": "Loaded Imports"
+                }
+              },
+              "queryRef": "Query Measures.Loaded Imports",
+              "nativeQueryRef": "Loaded Imports"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Query Measures"
+                    }
+                  },
+                  "Property": "Loaded Exports"
+                }
+              },
+              "queryRef": "Query Measures.Loaded Exports",
+              "nativeQueryRef": "Loaded Exports"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Query Measures"
+                    }
+                  },
+                  "Property": "Empty Exports"
+                }
+              },
+              "queryRef": "Query Measures.Empty Exports",
+              "nativeQueryRef": "Empty Exports"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Query Measures"
+                    }
+                  },
+                  "Property": "Empty Share"
+                }
+              },
+              "queryRef": "Query Measures.Empty Share",
+              "nativeQueryRef": "Empty Share"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Query Measures"
+                    }
+                  },
+                  "Property": "Import/Export Ratio Display"
+                }
+              },
+              "queryRef": "Query Measures.Import/Export Ratio Display",
+              "nativeQueryRef": "Import/Export Ratio Display"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Query Measures"
+                  }
+                },
+                "Property": "Loaded Imports"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "objects": {
+      "fillCustom": [
+        {
+          "properties": {
+            "fillColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 4,
+                      "Percent": 0.6
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Query Measures.Empty Share"
+          }
+        }
+      ],
+      "value": [
+        {
+          "properties": {
+            "horizontalAlignment": {
+              "expr": {
+                "Literal": {
+                  "Value": "'left'"
+                }
+              }
+            }
+          },
+          "selector": {
+            "id": "default"
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "efb9246b00b351c9105e",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Query Measures"
+              }
+            },
+            "Property": "Loaded Imports"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "71bddd8bdee016f160c0",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Query Measures"
+              }
+            },
+            "Property": "Loaded Exports"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "6f7bde8e524df7d07952",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Query Measures"
+              }
+            },
+            "Property": "Empty Exports"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "0b3b9bc17d601d99cb64",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Query Measures"
+              }
+            },
+            "Property": "Empty Share"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "78c15a90172db6ccb742",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Query Measures"
+              }
+            },
+            "Property": "Import/Export Ratio Display"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

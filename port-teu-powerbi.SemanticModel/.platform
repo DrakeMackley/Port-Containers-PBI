@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "port-teu-powerbi"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "712ea902-ead3-4c05-8df7-f8064d994520"
+  }
+}
