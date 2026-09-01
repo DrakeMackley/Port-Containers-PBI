@@ -1,84 +1,120 @@
 table 'Query Measures'
 	lineageTag: cca36997-6f47-450d-85d0-bad8dd681362
 
-	measure Rows = COUNTROWS(PortContainers)
+	measure Rows =
+			// How many PortContainers rows fall in the current filter context (data volume / row-count check)
+			COUNTROWS(PortContainers)
 		formatString: 0
 		lineageTag: 2b8193eb-8542-4baa-9bf4-44d198753b9a
 
-	measure 'Loaded Imports' = SUM(PortContainers[LoadedImportTEU])
+	measure 'Loaded Imports' =
+			// How many TEUs were imported as loaded containers in the current filter context?
+			SUM(PortContainers[LoadedImportTEU])
 		lineageTag: 90998306-ad39-4128-a770-4ff908928924
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
-	measure 'Loaded Exports' = SUM(PortContainers[LoadedExportTEU])
+	measure 'Loaded Exports' =
+			// How many TEUs were exported as loaded containers in the current filter context?
+			SUM(PortContainers[LoadedExportTEU])
 		lineageTag: 26b0e788-e697-47d4-8cab-c01059674219
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
-	measure 'Empty Exports' = SUM(PortContainers[EmptyExportTEU])
+	measure 'Empty Exports' =
+			// How many empty containers (in TEUs) moved outbound in the current filter context?
+			SUM(PortContainers[EmptyExportTEU])
 		lineageTag: c031fc0d-ba4b-477b-a180-a0471d133322
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
-	measure 'Total Outbound' = [Loaded Exports] + [Empty Exports]
+	measure 'Total Outbound' =
+			// What is total outbound TEU volume: loaded export cargo plus empty containers repositioned?
+			[Loaded Exports] + [Empty Exports]
 		lineageTag: c97adad8-f22b-4e4f-8cce-ad3e729fbc07
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
-	measure 'Empty Share' = DIVIDE([Empty Exports], [Total Outbound])
+	measure 'Empty Share' =
+			// What share of outbound TEUs are empty containers rather than loaded (revenue) cargo?
+			DIVIDE([Empty Exports], [Total Outbound]) // DIVIDE returns BLANK (not an error) when Total Outbound is 0 or blank
 		formatString: 0.0%;-0.0%;0.0%
 		lineageTag: 2ae0fc16-49f8-4776-9e92-2fc68dfb2c44
 
-	measure 'Import/Export Ratio' = DIVIDE([Loaded Imports], [Loaded Exports])
+	measure 'Import/Export Ratio' =
+			// For every loaded export TEU, how many loaded import TEUs arrive (trade balance indicator)?
+			DIVIDE([Loaded Imports], [Loaded Exports]) // DIVIDE guards against a zero/blank Loaded Exports denominator
 		lineageTag: ead63d03-b0c6-4352-ba60-eaba0f000762
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
-	measure 'Import/Export Ratio Display' = CONCATENATE(FORMAT([Import/Export Ratio], "Fixed"), ":1")
+	measure 'Import/Export Ratio Display' =
+			// What does the Import/Export Ratio look like as a readable "X.XX:1" label for cards and tooltips?
+			CONCATENATE(FORMAT([Import/Export Ratio], "Fixed"), ":1") // FORMAT "Fixed" renders 2 decimal places before appending the literal ":1" suffix
 		lineageTag: f7ab308a-eb48-478d-b356-e1664645a537
 
-	measure 'Loaded Imports Negative' = -[Loaded Imports]
+	measure 'Loaded Imports Negative' =
+			// What does Loaded Imports look like as a negative value, for visuals plotting imports vs. exports on opposite sides of zero?
+			-[Loaded Imports] // sign-flip only, no other logic change
 		lineageTag: 34e75cf7-c913-4243-95e6-c8003865a2f1
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
-	measure 'Total TEU' = [Loaded Imports] + [Total Outbound]
+	measure 'Total TEU' =
+			// What is total container traffic (TEUs) through the selected port(s): imports plus all outbound movement?
+			[Loaded Imports] + [Total Outbound] // Total Outbound already combines Loaded Exports and Empty Exports
 		lineageTag: c5df4376-824c-49ac-8c30-ca782b51cebe
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
+	/// Year-over-year percent change in loaded import volume (TEUs), comparing each period to the same period 12 months earlier. Blank when no prior-year value exists to compare against.
 	measure 'Loaded Imports YoY %' =
 			
-			VAR Prior = CALCULATE([Loaded Imports], DATEADD(DimDate[Date], -12, MONTH))
-			RETURN DIVIDE([Loaded Imports] - Prior, Prior)
+			// How much has Loaded Imports grown or shrunk versus the same period 12 months earlier?
+			VAR Prior =
+			    CALCULATE(
+			        [Loaded Imports],
+			        DATEADD(DimDate[Date], -12, MONTH) // shift the current date context back exactly 12 months; requires DimDate to be the model's marked, contiguous date table
+			    )
+			RETURN
+			    DIVIDE([Loaded Imports] - Prior, Prior) // BLANK when there's no prior-year value to compare against
 		lineageTag: 27766c6f-e473-4203-873f-0082d6dda3b7
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure 'Imports 3M Avg' =
 			
+			// What is the average monthly Loaded Imports volume over the trailing 3 months (smoothed trend)?
 			CALCULATE(
-			    AVERAGEX(VALUES(DimDate[YearMonth]), [Loaded Imports]),
-			    DATESINPERIOD(DimDate[Date], MAX(DimDate[Date]), -3, MONTH))
+			    AVERAGEX(VALUES(DimDate[YearMonth]), [Loaded Imports]), // average Loaded Imports across each distinct month currently in scope
+			    DATESINPERIOD(DimDate[Date], MAX(DimDate[Date]), -3, MONTH) // 3-month window ending on the latest date in the current context
+			)
 		lineageTag: 273afa7f-6cec-431e-9e57-afbd53c747a7
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure 'Imports Index 2019 100' =
 			
+			// How does Loaded Imports compare to the 2019 baseline, indexed so the 2019 monthly average = 100?
 			VAR Base =
 			    CALCULATE(
-			        AVERAGEX(VALUES(DimDate[YearMonth]), [Loaded Imports]),
-			        ALL(DimDate), DimDate[Year] = 2019
+			        AVERAGEX(VALUES(DimDate[YearMonth]), [Loaded Imports]), // average monthly Loaded Imports across 2019
+			        ALL(DimDate), // clear existing DimDate filters (Port/other filters still apply)
+			        DimDate[Year] = 2019 // then re-filter to 2019 only, regardless of what's selected in the report
 			    )
-			RETURN DIVIDE([Loaded Imports], Base) * 100
+			RETURN
+			    DIVIDE([Loaded Imports], Base) * 100 // current Loaded Imports as a percentage of the 2019 monthly average
 		lineageTag: 26d5561a-2f6e-4489-ac59-36024d0946dc
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure 'Share of National Imports' =
 			
-			DIVIDE([Loaded Imports], CALCULATE([Loaded Imports], ALL(DimPort)))
+			// What percentage of total (all-port) Loaded Imports does the currently selected port(s) represent?
+			DIVIDE(
+			    [Loaded Imports],
+			    CALCULATE([Loaded Imports], ALL(DimPort)) // ALL(DimPort) clears any port filter so the denominator is the national total
+			)
 		lineageTag: de189b64-4229-457c-858f-be89e3038004
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
