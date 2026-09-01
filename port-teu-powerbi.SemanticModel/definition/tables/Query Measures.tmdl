@@ -1,63 +1,52 @@
 table 'Query Measures'
 	lineageTag: cca36997-6f47-450d-85d0-bad8dd681362
 
-	/// Diagnostic count of fact rows in PortContainers under current filters.
 	measure Rows = COUNTROWS(PortContainers)
 		formatString: 0
 		lineageTag: 2b8193eb-8542-4baa-9bf4-44d198753b9a
 
-	/// Total loaded import TEU volume.
 	measure 'Loaded Imports' = SUM(PortContainers[LoadedImportTEU])
 		lineageTag: 90998306-ad39-4128-a770-4ff908928924
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
-	/// Total loaded export TEU volume.
 	measure 'Loaded Exports' = SUM(PortContainers[LoadedExportTEU])
 		lineageTag: 26b0e788-e697-47d4-8cab-c01059674219
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
-	/// Total empty (non-revenue) export TEU volume.
 	measure 'Empty Exports' = SUM(PortContainers[EmptyExportTEU])
 		lineageTag: c031fc0d-ba4b-477b-a180-a0471d133322
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
-	/// All outbound TEU: loaded exports plus empty exports.
 	measure 'Total Outbound' = [Loaded Exports] + [Empty Exports]
 		lineageTag: c97adad8-f22b-4e4f-8cce-ad3e729fbc07
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
-	/// Percentage of outbound TEU that is empty containers.
 	measure 'Empty Share' = DIVIDE([Empty Exports], [Total Outbound])
 		formatString: 0.0%;-0.0%;0.0%
 		lineageTag: 2ae0fc16-49f8-4776-9e92-2fc68dfb2c44
 
-	/// How many TEU are imported for every TEU exported.
 	measure 'Import/Export Ratio' = DIVIDE([Loaded Imports], [Loaded Exports])
 		lineageTag: ead63d03-b0c6-4352-ba60-eaba0f000762
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
-	/// Import/Export Ratio formatted as readable 'x.x:1' text for visuals.
 	measure 'Import/Export Ratio Display' = CONCATENATE(FORMAT([Import/Export Ratio], "Fixed"), ":1")
 		lineageTag: f7ab308a-eb48-478d-b356-e1664645a537
 
-	/// Loaded Imports sign-flipped, for diverging import/export bar charts.
 	measure 'Loaded Imports Negative' = -[Loaded Imports]
 		lineageTag: 34e75cf7-c913-4243-95e6-c8003865a2f1
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
-	/// All container movement: imports plus total outbound.
 	measure 'Total TEU' = [Loaded Imports] + [Total Outbound]
 		lineageTag: c5df4376-824c-49ac-8c30-ca782b51cebe
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
-	/// Year-over-year percentage change in loaded imports vs. same month last year.
 	measure 'Loaded Imports YoY %' =
 			
 			VAR Prior = CALCULATE([Loaded Imports], DATEADD(DimDate[Date], -12, MONTH))
@@ -66,7 +55,6 @@ table 'Query Measures'
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
-	/// Rolling 3-month average of loaded imports, smoothing month-to-month noise.
 	measure 'Imports 3M Avg' =
 			
 			CALCULATE(
@@ -76,7 +64,6 @@ table 'Query Measures'
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
-	/// Loaded imports indexed to a 2019 monthly average baseline of 100.
 	measure 'Imports Index 2019 100' =
 			
 			VAR Base =
@@ -89,7 +76,6 @@ table 'Query Measures'
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
-	/// Selected port's share of total loaded imports across all ports.
 	measure 'Share of National Imports' =
 			
 			DIVIDE([Loaded Imports], CALCULATE([Loaded Imports], ALL(DimPort)))
